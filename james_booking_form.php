@@ -142,7 +142,9 @@
 </script>
 <?php }else { ?>
     <div class="col-sm-12">
-           <h3>User account is required.</h3>
-           <a href="">Register</a>&nbsp;<a href="/wordpress/wp-login.php?redirect_to=/wordpress/booking">Login</a>
+           <h3>User account is required in order to proceed.</h3>
+           <a href="<?php echo get_home_url()?>/register">Register</a>&nbsp;<a href="<?php echo get_home_url();?>/wp-login.php?redirect_to=<?php echo get_home_url();?>/booking">Login</a>
         </div>
-<?php } ?>
+<?php 
+} ?>
+
