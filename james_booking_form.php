@@ -141,10 +141,8 @@
     }
 </script>
 <?php }else { ?>
-    <div class="col-sm-6 control-group">
-            <label for="bkFirstName" class="control-label">
-                First Name
-            </label>
-            <input type="text" class="form-control" id="bkFirstName" value readonly="true"/>
+    <div class="col-sm-12">
+           <h3>User account is required.</h3>
+           <a href="">Register</a>&nbsp;<a href="/wordpress/wp-login.php?redirect_to=/wordpress/booking">Login</a>
         </div>
 <?php } ?>
