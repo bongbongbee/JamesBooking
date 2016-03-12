@@ -8,6 +8,8 @@
 <div class="container-fluid">
     <!--
         to show the form to redirect in the event of the user not login and show links to register page
+        save this as a custom post type first
+        do the paypal account submission first 
     -->
     <?php
         if(is_user_logged_in())
@@ -18,31 +20,31 @@
             <label for="bkFirstName" class="control-label">
                 First Name
             </label>
-            <input type="text" class="form-control" id="bkFirstName" value readonly="true"/>
+            <input type="text" class="form-control" id="bkFirstName" value readonly="true" name="bkFirstName"/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="bkLastName" class="control-label">
                 Last Name
             </label>
-            <input type="text" class="form-control" id="bkLastName" value  readonly="true"/>
+            <input type="text" class="form-control" id="bkLastName" value  readonly="true" name="bkLastName"/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="bkNric" class="control-label">
                 NRIC / Passport No
             </label>
-            <input type="text" class="form-control" id="bkNric" value readonly="true" required/>
+            <input type="text" class="form-control" id="bkNric" value readonly="true" required name="bkNric"/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="bkContact" class="control-label">
                 Contact No.
             </label>
-            <input type="text" class="form-control" id="bkContact" value  readonly="true" required/>
+            <input type="text" class="form-control" id="bkContact" value  readonly="true" required name="bkContact"/>
         </div>
         <div class="col-sm-12">
             <label for="bkEmail"  class="control-label">
                 Email Address
             </label>
-            <input type="text" class="form-control" id="bkEmail" value  readonly="true" required email/>
+            <input type="text" class="form-control" id="bkEmail" value  readonly="true" required email name="bkEmail"/>
         </div>
         <div class="col-sm-12 control-group" >
             <label  class="control-label">
@@ -66,7 +68,7 @@
                 <label  class="control-label">
                     Session
                 </label>
-                <select class="form-control" id="bkSession">
+                <select class="form-control" id="bkSession" name="bkSessionw">
                     <option value="1" data-org="Slot A (9am to 9pm)">
                         Slot A (9am to 9pm)
                     </option>
@@ -82,13 +84,13 @@
                 <label for="bkStartDate"  class="control-label">
                     Slot Start Date
                 </label>
-                <input class="form-control" id="bkStartDate" required/>
+                <input class="form-control" id="bkStartDate" name="bkStartDate" required/>
             </div>
             <div class="col-sm-12">
                 <label  class="control-label">
                     Number of tables
                 </label>
-                <select class="form-control" id="bkNoOfTables">
+                <select class="form-control" id="bkNoOfTables" name="bkNoOfTables">
                     <?php
                     for ($i = 1; $i < 10; $i++) {
                     echo "<option value='$i'>$i</option>";
@@ -98,7 +100,7 @@
             </div>
             <div class="col-sm-12">
                 <input type="button" class="btn btn-default" value="Check Availability"/>
-                <input type="submit" class="btn btn-default" value="Book Slot"/>
+                <input type="submit" class="btn btn-default" value="Book Slot" name="bookSlot"/>
             </input>
         </div>
     </form>
@@ -106,8 +108,10 @@
 <script>
     jQuery(document).ready(function() {
         jQuery('#bkStartDate').datepicker({
-        dateFormat : 'dd mmm yy'
+        dateFormat : 'dd M yy',
+        minDate : new Date()
         });
+        /*
         jQuery("#booking_form").validate(
         {
             //errorPlacement
@@ -117,6 +121,10 @@
             },
             errorClass: "control-label has-error"
         });
+        */
+
+        //TODO have to come up with the total amount for the calculation of value * no of tables
+        
 
         //flip the cost for bkSession in the event of changing
 

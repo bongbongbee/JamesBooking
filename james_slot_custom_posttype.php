@@ -40,7 +40,7 @@ function jregister_post_type()
         'capability_type'    => 'post',
         'has_archive'        => true,
         'hierarchical'       => false,
-        'supports'           => array('author', 'editor', 'custom-fields'),
+        'supports'           => array('title','author', 'editor', 'custom-fields'),
     );
 
     register_post_type($name, $args);
