@@ -1,12 +1,9 @@
 <?php
 
 /*
-Plugin Name: Designmodo Registration Form
-Plugin URI: http://designmodo.com
-Description: Simple WordPress registration form plugin that just work
+Plugin Name: James Booking Module
 Version: 1.0
-Author: Agbonghama Collins
-Author URI: http://tech4sky.com
+Author: James Lian
  */
 
 include_once 'james_registration.php';

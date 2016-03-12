@@ -15,7 +15,7 @@ class james_booking
     {
 
         add_shortcode('james_booking', array($this, 'shortcode'));
-        add_action('wp_enqueue_scripts', array($this, 'flat_ui_kit'));
+        add_action('wp_enqueue_scripts', array($this, 'init_scripts'));
     }
 
     public function shortcode()
@@ -43,10 +43,14 @@ class james_booking
         return ob_get_clean();
     }
 
-    public function flat_ui_kit()
+    public function init_scripts()
     {
-        //wp_enqueue_style('bootstrap-css', plugins_url('bootstrap/css/bootstrap.css', __FILE__));
-        wp_enqueue_style('flat-ui-kit', plugins_url('css/flat-ui.css', __FILE__));
+        wp_enqueue_style('bootstrap-css', plugins_url('bootstrap/css/bootstrap.css', __FILE__));
+        wp_enqueue_script('jquery-ui-datepicker');
+        wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+        wp_enqueue_script('jquery-validation', plugins_url('js/jquery.validate.min.js', __FILE__));
+
+        //wp_enqueue_style('flat-ui-kit', plugins_url('css/flat-ui.css', __FILE__));
         //TODO
         //include the script to have jquery validation inside check whether there is a jquery inside
 
