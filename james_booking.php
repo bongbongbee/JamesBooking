@@ -1,4 +1,5 @@
 <?php
+
 class james_booking
 {
 
@@ -18,6 +19,11 @@ class james_booking
 
             $this->validation();
             $this->booking();
+        }
+
+        if($_GET['paymentId'])
+        {
+            $this->receive_payment();
         }
 
         $this->booking_form();
@@ -82,6 +88,12 @@ class james_booking
         add_post_meta($post_id, $paramStartDate, $_POST[$paramStartDate]);
         add_post_meta($post_id, $paramNoOfTables, $_POST[$paramNoOfTables]);
 
+        //start the payment
+        addCreditCard();
     }
 
+    public function receive_payment()
+    {
+        receive_paypal_payment();
+    }
 }

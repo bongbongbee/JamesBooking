@@ -12,7 +12,7 @@ include_once 'james_registration.php';
 
 include_once 'james_booking.php';
 
-
+include_once 'james_paypal.php';
 
 new james_registration;
 new james_booking;
