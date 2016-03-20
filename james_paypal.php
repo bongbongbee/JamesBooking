@@ -12,7 +12,7 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 
-function addCreditCard()
+function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref_no)
 {
     // After Step 1
     $apiContext = get_api_context();
@@ -27,38 +27,24 @@ function addCreditCard()
 // ### Itemized information
     // (Optional) Lets you specify item wise
     // information
+    echo "$num_of_tables. table".intval($num_of_tables);
     $item1 = new Item();
-    $item1->setName('Ground Coffee 40 oz')
-        ->setCurrency('USD')
-        ->setQuantity(1)
-        ->setSku("123123") // Similar to `item_number` in Classic API
-        ->setPrice(7.5);
-    $item2 = new Item();
-    $item2->setName('Granola bars')
-        ->setCurrency('USD')
-        ->setQuantity(5)
-        ->setSku("321321") // Similar to `item_number` in Classic API
-        ->setPrice(2);
+    $item1->setName($item_name)
+        ->setCurrency('SGD')
+        ->setQuantity(intval($num_of_tables))
+        ->setSku($ref_no) // Similar to `item_number` in Classic API
+        ->setPrice($one_table_cost);
 
     $itemList = new ItemList();
-    $itemList->setItems(array($item1, $item2));
+    $itemList->setItems(array($item1));
 
-// ### Additional payment details
-    // Use this optional field to set additional
-    // payment information such as tax, shipping
-    // charges etc.
-    $details = new Details();
-    $details->setShipping(1.2)
-        ->setTax(1.3)
-        ->setSubtotal(17.50);
-
-// ### Amount
+    // ### Amount
     // Lets you specify a payment amount.
     // You can also specify additional details
     // such as shipping, tax.
     $amount = new Amount();
-    $amount->setCurrency("USD")
-        ->setTotal(20)
+    $amount->setCurrency("SGD")
+        ->setTotal($one_table_cost * intval($num_of_tables))
         ->setDetails($details);
 
 // ### Transaction
@@ -66,7 +52,8 @@ function addCreditCard()
     // payment - what is the payment for and who
     // is fulfilling it.
     $transaction = new Transaction();
-    $transaction->setAmount($amount)
+    $transaction
+        ->setAmount($amount)
         ->setItemList($itemList)
         ->setDescription("Payment description")
         ->setInvoiceNumber(uniqid());
@@ -74,10 +61,10 @@ function addCreditCard()
 // ### Redirect urls
     // Set the urls that the buyer must be redirected to after
     // payment approval/ cancellation.
-    $baseUrl      = "http://localhost/wordpress/booking";
+    $baseUrl      = "http://localhost/wordpress";
     $redirectUrls = new RedirectUrls();
-    $redirectUrls->setReturnUrl("$baseUrl?success=true")
-        ->setCancelUrl("$baseUrl?success=false");
+    $redirectUrls->setReturnUrl("$baseUrl/booking-success")
+        ->setCancelUrl("$baseUrl/booking-failure");
 
 // ### Payment
     // A Payment Resource; create one using
@@ -97,6 +84,10 @@ function addCreditCard()
     // for payment approval
     try {
         $payment->create($apiContext);
+    } catch (PayPal\Exception\PayPalConnectionException $ex) {
+        echo $ex->getCode(); // Prints the Error Code
+        echo $ex->getData(); // Prints the detailed error message
+        die($ex);
     } catch (Exception $ex) {
         echo $ex;
 
@@ -109,7 +100,8 @@ function addCreditCard()
     // method
     $approvalUrl = $payment->getApprovalLink();
 
-    echo "Approval URL : $approvalUrl";
+    wp_redirect($approvalUrl);
+    exit;
 
 }
 
@@ -124,6 +116,7 @@ function get_api_context()
 
     $apiContext->setConfig(
         array(
+            'mode'           => 'sandbox',
             'log.LogEnabled' => true,
             'log.FileName'   => 'PayPal.log',
             'log.LogLevel'   => 'FINE',
@@ -135,21 +128,17 @@ function get_api_context()
 function receive_paypal_payment()
 {
     $apiContext = get_api_context();
-    $paymentId = $_GET['paymentId'];
-    $payment   = Payment::get($paymentId, $apiContext);
-    $execution = new PaymentExecution();
+    $paymentId  = $_GET['paymentId'];
+    $payment    = Payment::get($paymentId, $apiContext);
+    $execution  = new PaymentExecution();
     $execution->setPayerId($_GET['PayerID']);
 
     $transaction = new Transaction();
     $amount      = new Amount();
     $details     = new Details();
 
-    $details->setShipping(2.2)
-        ->setTax(1.3)
-        ->setSubtotal(17.50);
-
-    $amount->setCurrency('USD');
-    $amount->setTotal(21);
+    $amount->setCurrency('SGD');
+    $amount->setTotal($payment->getTransactions()[0]->getAmount()->getTotal());
     $amount->setDetails($details);
     $transaction->setAmount($amount);
 
@@ -165,6 +154,10 @@ function receive_paypal_payment()
         } catch (Exception $ex) {
             echo $ex;
         }
+    } catch (PayPal\Exception\PayPalConnectionException $ex) {
+        echo $ex->getCode(); // Prints the Error Code
+        echo $ex->getData(); // Prints the detailed error message
+        die($ex);
     } catch (Exception $ex) {
         echo $ex;
     }

@@ -8,24 +8,24 @@ class james_booking
 
         add_shortcode('james_booking', array($this, 'shortcode'));
         add_action('wp_enqueue_scripts', array($this, 'init_scripts'));
+        add_action('init', array($this, 'add_book_post'));
+    }
+
+    public function add_book_post()
+    {
+        if ($_POST['bookSlot']) {
+
+            $this->validation();
+            $this->start_book();
+        } elseif ($_GET['paymentId']) {
+            $this->receive_payment();
+        }
     }
 
     public function shortcode()
     {
 
         ob_start();
-
-        if ($_POST['bookSlot']) {
-
-            $this->validation();
-            $this->booking();
-        }
-
-        if($_GET['paymentId'])
-        {
-            $this->receive_payment();
-        }
-
         $this->booking_form();
         return ob_get_clean();
     }
@@ -58,42 +58,41 @@ class james_booking
 
     }
 
-    public function booking()
+    public function start_book()
     {
-        $paramFirstName      = "bkFirstName";
-        $paramLastName       = "bkLastName";
-        $paramNric           = "bkNric";
-        $paramContact        = "bkContact";
-        $paramEmail          = "bkEmail";
-        $paramStudentOrAdult = "bkStudentOrAdult";
-        $paramSession        = "bkSession";
-        $paramStartDate      = "bkStartDate";
-        $paramNoOfTables     = "bkNoOfTables";
-        
-        
+
         $post_detail = array(
             'post_type'   => 'slot',
-            'post_title'  => 'Slot at '+$_POST[$paramStartDate],
+            'post_title'  => 'Slot at '+$GLOBALS['StartDate'],
             'post_status' => 'Publish',
         );
 
         $post_id = wp_insert_post($post_detail, true);
-        add_post_meta($post_id, $paramFirstName, $_POST[$paramFirstName]);
-        add_post_meta($post_id, $paramLastName, $_POST[$paramLastName]);
-        add_post_meta($post_id, $paramNric, $_POST[$paramNric]);
-        add_post_meta($post_id, $paramContact, $_POST[$paramContact]);
-        add_post_meta($post_id, $paramEmail, $_POST[$paramEmail]);
-        add_post_meta($post_id, $paramStudentOrAdult, $_POST[$paramStudentOrAdult]);
-        add_post_meta($post_id, $paramSession, $_POST[$paramSession]);
-        add_post_meta($post_id, $paramStartDate, $_POST[$paramStartDate]);
-        add_post_meta($post_id, $paramNoOfTables, $_POST[$paramNoOfTables]);
+        add_post_meta($post_id, $paramFirstName, $_POST[$GLOBALS['paramFirstName']]);
+        add_post_meta($post_id, $paramLastName, $_POST[$GLOBALS['paramLastName']]);
+        add_post_meta($post_id, $paramNric, $_POST[$GLOBALS['paramNric']]);
+        add_post_meta($post_id, $paramContact, $_POST[$GLOBALS['paramContact']]);
+        add_post_meta($post_id, $paramEmail, $_POST[$GLOBALS['paramEmail']]);
+        add_post_meta($post_id, $paramStudentOrAdult, $_POST[$GLOBALS['paramStudentOrAdult']]);
+        add_post_meta($post_id, $paramSession, $_POST[$GLOBALS['paramSession']]);
+        add_post_meta($post_id, $paramStartDate, $_POST[$GLOBALS['paramStartDate']]);
+        add_post_meta($post_id, $paramNoOfTables, $_POST[$GLOBALS['paramNoOfTables']]);
+
+        
+        $one_table_cost = (($_POST[$GLOBALS['paramStudentOrAdult']] == "Student") ? 10 : 15) * (($_POST[$GLOBALS['paramSession']] == 3) ? 2 : 1);
+
+        $mypostobject = (object) $_POST;
 
         //start the payment
-        addCreditCard();
+        
+        addAndRedirectPayment($one_table_cost, $_POST[$GLOBALS['paramNoOfTables']], $item_name, $post_id);
+
+        
     }
 
     public function receive_payment()
     {
         receive_paypal_payment();
+        send_sms('test');
     }
 }

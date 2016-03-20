@@ -20,31 +20,31 @@
             <label for="bkFirstName" class="control-label">
                 First Name
             </label>
-            <input type="text" class="form-control" id="bkFirstName" value readonly="true" name="bkFirstName"/>
+            <input type="text" class="form-control" id="bkFirstName"  readonly="true" name="bkFirstName" value="First Name"/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="bkLastName" class="control-label">
                 Last Name
             </label>
-            <input type="text" class="form-control" id="bkLastName" value  readonly="true" name="bkLastName"/>
+            <input type="text" class="form-control" id="bkLastName"   readonly="true" name="bkLastName" value="Last Name"/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="bkNric" class="control-label">
                 NRIC / Passport No
             </label>
-            <input type="text" class="form-control" id="bkNric" value readonly="true" required name="bkNric"/>
+            <input type="text" class="form-control" id="bkNric"  readonly="true" required name="bkNric" value="NRIC"/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="bkContact" class="control-label">
                 Contact No.
             </label>
-            <input type="text" class="form-control" id="bkContact" value  readonly="true" required name="bkContact"/>
+            <input type="text" class="form-control" id="bkContact"   readonly="true" required name="bkContact" value="ksk"/>
         </div>
         <div class="col-sm-12">
             <label for="bkEmail"  class="control-label">
                 Email Address
             </label>
-            <input type="text" class="form-control" id="bkEmail" value  readonly="true" required email name="bkEmail"/>
+            <input type="text" class="form-control" id="bkEmail"   readonly="true" required email name="bkEmail" value="james147@gmail.com"/>
         </div>
         <div class="col-sm-12 control-group" >
             <label  class="control-label">
