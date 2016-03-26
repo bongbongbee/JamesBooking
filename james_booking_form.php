@@ -63,7 +63,7 @@ if (is_user_logged_in()) {
                 <label class="radio-inline" for="paramStudentOrAdult2">
                     <input type="radio" name="paramStudentOrAdult" id="paramStudentOrAdult2" value="Adult" />
                     Adult
-                </label>
+                </label><br/>
                 <label id="showIdMsg">
                     Please bring along your proof of student id if student is selected.
                 </label>
@@ -79,8 +79,8 @@ if (is_user_logged_in()) {
                     Tai Seng
                 </label>
                 <label class="radio-inline" for="paramLocation2">
-                    <input type="radio" name="paramLocation" id="paramLocation2" value="Bukit Batok" />
-                    Bukit Batok
+                    <input type="radio" name="paramLocation" id="paramLocation2" value="Bukit Batok" disabled="true" />
+                    Bukit Batok (Coming Soon)
                 </label>
             </div>
             <div class="col-sm-6 control-group">
@@ -103,7 +103,7 @@ if (is_user_logged_in()) {
                 <label for="paramStartDate"  class="control-label">
                     Slot Start Date
                 </label>
-                <input class="form-control" id="paramStartDate" name="paramStartDate" required/>
+                <input class="form-control required" id="paramStartDate" name="paramStartDate" />
             </div>
             <div class="col-sm-12">
                 <label  class="control-label">

@@ -17,9 +17,42 @@ class james_booking
 
             $this->validation();
             $this->start_book();
+        } elseif ($_GET['func'] == "checkAvail") {
+            $this->check_avail();
+
         } elseif ($_GET['paymentId']) {
             $this->receive_payment();
         }
+    }
+
+    public function check_avail()
+    {
+        $startDate     = $_GET["paramStartDate"];
+        $noOfTables    = intval($_GET["paramNoOfTables"]);
+        $paramLocation = $_GET["paramLocation"];
+        $session       = intval($_GET["paramSession"]);
+        $result        = array("startDate" => $startDate, "noOfTables" => $noOfTables, "location" => location, "session" => $session);
+
+        $args = array('post_type' => 'slot',
+            'meta_query'              => array(
+                array(
+                    'key'     => 'paramStartDate',
+                    'value'   => $startDate,
+                    'compare' => '=',
+                ),
+                array(
+                    'key'     => 'paramStartDate',
+                    'value'   => $startDate,
+                    'compare' => '=',
+                ),
+            ),
+        )
+        ;
+        $the_query            = new WP_Query($args);
+        $result["found_post"] = $the_query->found_posts;
+        echo json_encode($result);
+
+        die();
     }
 
     public function shortcode()
@@ -63,12 +96,12 @@ class james_booking
     {
 
         $post_detail = array(
-            
-            'post_title'  => 'Slot',
+
+            'post_title'   => 'Slot',
             'post_content' => 'testing it',
-            'post_type'   => 'slot',
-            'post_name' => 'yale',
-            'post_status' => 'Publish',
+            'post_type'    => 'slot',
+            'post_name'    => 'yale',
+            'post_status'  => 'Publish',
         );
 
         $post_id = wp_insert_post($post_detail, true);
@@ -84,7 +117,7 @@ class james_booking
         //calculate the cost
         $one_table_cost = (($_POST['paramStudentOrAdult'] == "Student") ? 10 : 15) * (($_POST['paramSession'] == 3) ? 2 : 1);
 
-        add_post_meta($post_id,"total_cost", '$.$one_table_cost');
+        add_post_meta($post_id, "total_cost", '$.$one_table_cost');
 
         $mypostobject = (object) $_POST;
 
