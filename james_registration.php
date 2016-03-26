@@ -15,7 +15,7 @@ class james_registration
     {
 
         add_shortcode('james_register', array($this, 'shortcode'));
-        add_action('wp_enqueue_scripts', array($this, 'flat_ui_kit'));
+        //add_action('wp_enqueue_scripts', array($this, 'flat_ui_kit'));
     }
 
     public function registration_form()

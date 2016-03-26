@@ -7,7 +7,9 @@ function send_sms($booking_message)
     $send_url = 'https://www.commzgate.net/gateway/SendMsg';
 
     $admin_tel_no = array(
-        '6594764364','6596491385');
+        '6594764364'
+        //,'6596491385'
+        );
 
     
 
