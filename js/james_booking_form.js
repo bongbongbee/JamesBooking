@@ -1,4 +1,7 @@
 jQuery(document).ready(function() {
+    jQuery.validator.addMethod("contact", function(value, element) {
+        return (value.startsWith("7") || value.startsWith("8") || value.startsWith("9"));
+    }, "Please enter a valid contact number in the profile page");
     jQuery('#paramStartDate').datepicker({
         dateFormat: 'dd M yy',
         minDate: new Date()
@@ -6,9 +9,24 @@ jQuery(document).ready(function() {
     var bookingFormValidator = jQuery('#booking_form').validate({
         //errorPlacement
         errorPlacement: function(error, element) {
-            element.parent('div').addClass('has-error').append(error);
+            jQuery(element).parent('div').addClass('has-error').append(error);
         },
-        errorClass: 'control-label has-error'
+        success: function(label,element) {
+           jQuery(element).parent('div').removeClass('has-error');
+        },
+        errorClass: 'control-label has-error',
+        rules: {
+            paramNric: {
+                require_from_group: [3, ".required-group"]
+            },
+            paramEmail: {
+                require_from_group: [3, ".required-group"]
+            },
+            paramContact: {
+                contact: true,
+                require_from_group: [3, ".required-group"]
+            }
+        }
     });
     //TODO have to come up with the total amount for the calculation of value * no of tables
     //flip the cost for bkSession in the event of changing

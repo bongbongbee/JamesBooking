@@ -18,37 +18,43 @@
     -->
     <?php
 if (is_user_logged_in()) {
+    $user_id = get_current_user_id();
+    $name    = xprofile_get_field_data('1', $user_id);
+    $nric    = xprofile_get_field_data('2', $user_id);
+    $contact = xprofile_get_field_data('3', $user_id);
+    $email   = xprofile_get_field_data('4', $user_id);
     ?>
+
     <form action="" id="booking_form" method="POST">
-        <div class="col-sm-6 control-group">
-            <label for="paramFirstName" class="control-label">
+        <div class="col-sm-12 control-group">
+            <label for="paramName" class="control-label">
                 First Name
             </label>
-            <input type="text" class="form-control" id="paramFirstName"  readonly="true" name="paramFirstName" value="First Name"/>
+            <input type="text" class="form-control" id="paramName"  readonly="true" name="paramName" value="<?php echo $name ?>"/>
         </div>
-        <div class="col-sm-6 control-group"  >
-            <label for="paramLastName" class="control-label">
-                Last Name
-            </label>
-            <input type="text" class="form-control" id="paramLastName"   readonly="true" name="paramLastName" value="Last Name"/>
-        </div>
+
         <div class="col-sm-6 control-group"  >
             <label for="paramNric" class="control-label">
                 NRIC / Passport No
             </label>
-            <input type="text" class="form-control" id="paramNric"  readonly="true" required name="paramNric" value="NRIC"/>
+            <input type="text" class="form-control  required-group" id="paramNric"    name="paramNric" value="<?php echo $nric ?>" readonly=true/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="paramContact" class="control-label">
                 Contact No.
             </label>
-            <input type="text" class="form-control" id="paramContact"   readonly="true" required name="paramContact" value="ksk"/>
+            <input type="text" class="form-control  required-group contact" id="paramContact" name="paramContact" value="<?php echo $contact ?>" minlength="8" readonly=true/>
         </div>
         <div class="col-sm-12">
             <label for="paramEmail"  class="control-label">
                 Email Address
             </label>
-            <input type="text" class="form-control" id="paramEmail"   readonly="true" required email name="paramEmail" value="james147@gmail.com"/>
+            <input type="text" class="form-control required-group email" id="paramEmail" name="paramEmail" value="<?php echo $email ?>" readonly=true/>
+        </div>
+        <div class="col-sm-12">
+            <div class="showEditProfilePage" >
+                To edit your profile please click <a href="<?php echo get_edit_user_link(); ?>">here</a>
+            </div>
         </div>
         <div class="col-sm-12 control-group" >
             <label  class="control-label">
