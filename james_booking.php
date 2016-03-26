@@ -32,10 +32,11 @@ class james_booking
 
     public function init_scripts()
     {
-        //wp_enqueue_style('bootstrap-css', plugins_url('bootstrap/css/bootstrap.css', __FILE__));
+        wp_enqueue_style('bootstrap-css', plugins_url('bootstrap/css/bootstrap-tsa.css', __FILE__));
         wp_enqueue_script('jquery-ui-datepicker');
         wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
         wp_enqueue_script('jquery-validation', plugins_url('js/jquery.validate.min.js', __FILE__));
+        wp_enqueue_script('james-booking-form', plugins_url('js/james_booking_form.js', __FILE__));
 
         //wp_enqueue_style('flat-ui-kit', plugins_url('css/flat-ui.css', __FILE__));
         //TODO

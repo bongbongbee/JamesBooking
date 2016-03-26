@@ -1,9 +1,14 @@
 <style>
-    #booking_form input[type="radio"]
+    #booking_form label
     {
-    margin-top: 14px;
+        margin-top:5px;
+    }
+    #booking_form .btn
+    {
+        margin-top:10px;
     }
 </style>
+<div class="bootstrap-styles">
 
 <div class="container-fluid">
     <!--
@@ -63,6 +68,21 @@ if (is_user_logged_in()) {
                     Please bring along your proof of student id if student is selected.
                 </label>
             </div>
+            <div class="col-sm-12 control-group" >
+            <label  class="control-label">
+                Please choose which location?
+            </label>
+            <br/>
+            <label class="radio-inline" for="paramLocation1">
+                <input type="radio" name="paramLocation" id="paramLocation1" value="Tai Seng"
+                    checked/>
+                    Tai Seng
+                </label>
+                <label class="radio-inline" for="paramLocation2">
+                    <input type="radio" name="paramLocation" id="paramLocation2" value="Bukit Batok" />
+                    Bukit Batok
+                </label>
+            </div>
             <div class="col-sm-6 control-group">
                 <label  class="control-label">
                     Session
@@ -98,55 +118,11 @@ for ($i = 1; $i < 10; $i++) {
                 </select>
             </div>
             <div class="col-sm-12">
-                <input type="button" class="btn btn-default" value="Check Availability"/>
-                <input type="submit" class="btn btn-default" value="Book Slot" name="bookSlot"/>
-            </input>
+                <input type="button" id="checkAvailBtn" class="btn btn-default" value="Check Availability"/>
+                <input type="submit" class="btn btn-default hidden" value="Book Slot" name="bookSlot"/>
         </div>
     </form>
 </div>
-<script>
-    jQuery(document).ready(function() {
-        jQuery('#paramStartDate').datepicker({
-        dateFormat : 'dd M yy',
-        minDate : new Date()
-        });
-        /*
-        jQuery("#booking_form").validate(
-        {
-            //errorPlacement
-            errorPlacement: function (error, element)
-            {
-                element.parent("div").addClass("has-error").append(error);
-            },
-            errorClass: "control-label has-error"
-        });
-        */
-
-        //TODO have to come up with the total amount for the calculation of value * no of tables
-
-
-        //flip the cost for bkSession in the event of changing
-
-        jQuery('input[name="paramStudentOrAdult"]').click(function(event)
-        {
-            var half = this.value == "Student" ? "$10" : "$20";
-            var full = this.value == "Student" ? "$15" : "$30";
-            changeCost(half,full);
-            jQuery("#showIdMsg").toggle();
-        });
-
-        changeCost("$10","$15");
-    });
-
-    function changeCost(half, full)
-    {
-        var options = jQuery("#bkSession").children("option");
-        for(i=0;i<options.length;i++)
-        {
-            jQuery(options[i]).text(jQuery(options[i]).attr("data-org") + " " + (i<2 ? half : full));
-        }
-    }
-</script>
 <?php } else {
     ?>
     <div class="col-sm-12">
@@ -156,4 +132,4 @@ for ($i = 1; $i < 10; $i++) {
 <?php
 }
 ?>
-
+</div>
