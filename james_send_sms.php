@@ -1,9 +1,9 @@
-
 <?php
 
 $admin_tel_no = array(
-    '94764364', //james
-    //,'6596491385'
+    '94764364' //james
+    // ,'96491385' //Clement
+    // ,'90010020' //Tom
 );
 
 $slotStartDate   = "";
@@ -48,7 +48,7 @@ function send_admin_sms()
     global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $admin_tel_no;
     $totalCost = $slotTotalCost;
 
-    $sms_admin_msg_tpl = "Name:$slotUserName Tel No:$slotUserContact Booking:$slotStartDate Tables:$slotNoOfTables Loc:$slotLocation $totalCost";
+    $sms_admin_msg_tpl = "Name:$slotUserName Tel No:$slotUserContact Booking:$slotStartDate Tables:$slotNoOfTables Loc:$slotLocation $$totalCost";
     $message           = $sms_admin_msg_tpl;
     send_sms($message, $admin_tel_no);
 }

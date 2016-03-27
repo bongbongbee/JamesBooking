@@ -12,12 +12,18 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 
-$jamesBaseUrl      = site_url();
-$jamesSuccessUrl   = "$jamesBaseUrl/booking-success";
-$jamesFailUrl      = "$jamesBaseUrl/booking-failure";
-$jamesClientId     = 'AU26pQeqXHj1_1FlUTSlSTLu1LKPtax9O7E1zG898sl72nGmwtFBNmkQTgOtPr_dfOknK8aqiCvMh5Sy';
-$jamesClientSecret = 'EJ8eQfryyRM4_qE3w9VX32KLgD18vXzv9BFxj2OcEccenXqmFaGw05BD3A0cthw3skN0r41UgzwPzTam';
-$paypalMode        = 'sandbox';
+$jamesBaseUrl = site_url();
+//thestudyarea@gmail.com
+//201523756w
+$jamesSuccessUrl = "$jamesBaseUrl/booking-success";
+$jamesFailUrl    = "$jamesBaseUrl/booking-failure";
+//James
+// $jamesClientId     = 'AU26pQeqXHj1_1FlUTSlSTLu1LKPtax9O7E1zG898sl72nGmwtFBNmkQTgOtPr_dfOknK8aqiCvMh5Sy';
+// $jamesClientSecret = 'EJ8eQfryyRM4_qE3w9VX32KLgD18vXzv9BFxj2OcEccenXqmFaGw05BD3A0cthw3skN0r41UgzwPzTam';
+$jamesClientId     = 'ATAo58tHcl99h2jDmTCzqfLyq4Tzzo_UczICiHydpxwkuwrsYnSHT-pj7ej3mgJZ8ubRYUlglJuwO2Ac';
+$jamesClientSecret = 'EFPjxAprHXSoWay-V0xXpX-sozMCAPQE1wdle7HjLfj9rdsQ6gX-ICydRU-I5_Do4cbjH0_YbmuQzVl0';
+
+$paypalMode = 'sandbox';
 
 function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref_no)
 {
@@ -136,37 +142,43 @@ function get_api_context()
     return $apiContext;
 }
 
-function receive_paypal_payment()
+function receive_paypal_payment($slotId)
 {
-    $apiContext = get_api_context();
-    $paymentId  = $_GET['paymentId'];
-    $payment    = Payment::get($paymentId, $apiContext);
-    $execution  = new PaymentExecution();
-    $execution->setPayerId($_GET['PayerID']);
+    $paypalPaid = get_post_meta($slotId, 'paypalPaid', true);
+    if ($paypalPaid != "true") {
+        $apiContext = get_api_context();
+        $paymentId  = $_GET['paymentId'];
+        $payment    = Payment::get($paymentId, $apiContext);
+        $execution  = new PaymentExecution();
+        $execution->setPayerId($_GET['PayerID']);
 
-    $transaction = new Transaction();
-    $amount      = new Amount();
-    $details     = new Details();
+        $transaction = new Transaction();
+        $amount      = new Amount();
+        $details     = new Details();
 
-    $amount->setCurrency('SGD');
-    $amount->setTotal($payment->getTransactions()[0]->getAmount()->getTotal());
-    $amount->setDetails($details);
-    $transaction->setAmount($amount);
+        $amount->setCurrency('SGD');
+        $amount->setTotal($payment->getTransactions()[0]->getAmount()->getTotal());
+        $amount->setDetails($details);
+        $transaction->setAmount($amount);
 
-    $execution->addTransaction($transaction);
+        $execution->addTransaction($transaction);
 
-    try {
-        $result = $payment->execute($execution, $apiContext);
         try {
-            $payment = Payment::get($paymentId, $apiContext);
+            $result = $payment->execute($execution, $apiContext);
+            add_post_meta($slotId, 'paypalPaid', 'true');
+            add_post_meta($slotId, 'paypalPayerID', $_GET['PayerID']);
+            add_post_meta($slotId, 'paypalPaymentID', $_GET['paymentId']);
+            try {
+                $payment = Payment::get($paymentId, $apiContext);
+            } catch (Exception $ex) {
+                echo $ex;
+            }
+        } catch (PayPal\Exception\PayPalConnectionException $ex) {
+            echo $ex->getCode(); // Prints the Error Code
+            echo $ex->getData(); // Prints the detailed error message
+            die($ex);
         } catch (Exception $ex) {
             echo $ex;
         }
-    } catch (PayPal\Exception\PayPalConnectionException $ex) {
-        echo $ex->getCode(); // Prints the Error Code
-        echo $ex->getData(); // Prints the detailed error message
-        die($ex);
-    } catch (Exception $ex) {
-        echo $ex;
     }
 }

@@ -10,7 +10,7 @@
 </style>
 <div class="bootstrap-styles">
 
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top:10px;margin-bottom:10px">
     <!--
         to show the form to redirect in the event of the user not login and show links to register page
         save this as a custom post type first
@@ -133,14 +133,15 @@ for ($i = 1; $i < 10; $i++) {
         <input type="hidden" name="paramTotalCost" id="totalCost"/>
         <input type="hidden" name="paramOneTableCost" id="oneTableCost"/>
     </form>
-</div>
+
 <?php } else {
     ?>
     <div class="col-sm-12">
            <h3>User account is required in order to proceed.</h3>
-           <a href="<?php echo get_home_url() ?>/register">Register</a>&nbsp;<a href="<?php echo get_home_url(); ?>/wp-login.php?redirect_to=<?php echo get_home_url(); ?>/booking">Login</a>
+           <a href="<?php echo get_home_url() ?>/register">Register</a>&nbsp;<a href=" <?php echo wp_login_url('/booking'); ?>">Login</a>
         </div>
 <?php
 }
 ?>
+</div>
 </div>

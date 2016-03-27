@@ -54,7 +54,7 @@ class james_booking
 
     public function check_avail()
     {
-        $limit      = 30;
+        $limit      = 5;
         $startDate  = $_GET["paramStartDate"];
         $noOfTables = intval($_GET["paramNoOfTables"]);
         $location   = $_GET["paramLocation"];
@@ -122,7 +122,6 @@ class james_booking
     public function start_book()
     {
         $post_title = $_POST['paramName'] . " " . $_POST['paramStartDate'] . " at slot " . $_POST['paramSession'] . " Booked at " . date("d M y h:i:s");
-        echo $post_title;
 
         $post_detail = array(
             'post_title'  => $post_title,
@@ -168,7 +167,7 @@ class james_booking
     public function receive_payment()
     {
         $slotId = intval($_GET["slotId"]);
-        //receive_paypal_payment();
+        receive_paypal_payment($slotId);
         send_slot_sms($slotId);
     }
 }
