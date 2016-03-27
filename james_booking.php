@@ -41,9 +41,15 @@ class james_booking
                 ),
             ),
         );
-        $the_query            = new WP_Query($args);
-        $result["found_post"] = $the_query->found_posts;
-        return intval($the_query->found_posts);
+        $the_query   = new WP_Query($args);
+        $table_total = 0;
+        while ($the_query->have_posts()) {
+            $the_query->the_post();
+            $table_count = intval(get_post_meta(get_the_ID(), 'NoOfTables',true));
+            $table_total += $table_count;
+
+        }
+        return $table_total;
     }
 
     public function check_avail()
