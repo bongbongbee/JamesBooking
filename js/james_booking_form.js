@@ -1,18 +1,23 @@
+var half = [10, 20];
+var full = [15, 30];
 jQuery(document).ready(function() {
     jQuery.validator.addMethod("contact", function(value, element) {
         return (value.startsWith("7") || value.startsWith("8") || value.startsWith("9"));
     }, "Please enter a valid contact number in the profile page");
     jQuery('#paramStartDate').datepicker({
         dateFormat: 'dd M yy',
-        minDate: new Date()
+        minDate: new Date(),
+        onSelect: function() {
+            toggleButtons(false);
+        }
     });
     var bookingFormValidator = jQuery('#booking_form').validate({
         //errorPlacement
         errorPlacement: function(error, element) {
             jQuery(element).parent('div').addClass('has-error').append(error);
         },
-        success: function(label,element) {
-           jQuery(element).parent('div').removeClass('has-error');
+        success: function(label, element) {
+            jQuery(element).parent('div').removeClass('has-error');
         },
         errorClass: 'control-label has-error',
         rules: {
@@ -31,13 +36,19 @@ jQuery(document).ready(function() {
     //TODO have to come up with the total amount for the calculation of value * no of tables
     //flip the cost for bkSession in the event of changing
     jQuery('input[name="paramStudentOrAdult"]').click(function(event) {
-        var half = this.value == 'Student' ? '$10' : '$20';
-        var full = this.value == 'Student' ? '$15' : '$30';
-        changeCost(half, full);
+        var halfCur = "$" + (this.value == 'Student' ? half[0] : half[1]);
+        var fullCur = "$" + (this.value == 'Student' ? full[0] : full[1]);
+        changeCost(halfCur, fullCur);
         jQuery('#showIdMsg').toggle();
+        toggleButtons(false);
     });
+    jQuery('input[name="paramLocation"]').click(function(event) {
+        toggleButtons(false);
+    });
+    jQuery('#paramSession, #paramNoOfTables').change(function(event) {
+        toggleButtons(false);
+    })
     jQuery('#checkAvailBtn').click(function(event) {
-        console.log('check');
         if (jQuery('#booking_form').valid()) {
             checkAvail();
         }
@@ -67,13 +78,48 @@ function checkAvail() {
 }
 
 function afterCheckAvail(data) {
-    console.debug(data);
+    //to validate the data is true
+    console.log("data:" + JSON.stringify(data));
+    if (data["available"]) {
+        calculateTotal();
+        displayAvailMessage();
+    } else {
+        displayNotAvailMessage();
+    }
 }
 
-function displayAvailMessage() {}
+function calculateTotal() {
+    var studentOrAdult = jQuery('input[name="paramStudentOrAdult"]:checked').val() == "Student";
+    var oneTableCost = parseInt(jQuery('#paramSession option:selected').val()) <= 2 ? half[studentOrAdult ? 0 : 1] : full[studentOrAdult ? 0 : 1];
+    var noOfTables = jQuery('#paramNoOfTables option:selected').val();
+    var totalCost = parseInt(noOfTables) * oneTableCost;
+    jQuery('#totalCost').val(totalCost);
+    console.log("Total Cost : " + totalCost);
+}
+
+function displayAvailMessage() {
+    //display the avaliable message
+    jQuery('.availMsg').text("Slots Available. Please click Book Slots to PayPal").removeClass('hidden bg-danger').addClass("bg-success");
+    toggleButtons(true);
+}
+
+function displayNotAvailMessage() {
+    jQuery('.availMsg').text("Slots Not Available. Please select a later date.").removeClass('hidden bg-success').addClass("bg-danger");
+    toggleButtons(false);
+}
+
+function toggleButtons(checked) {
+    if (checked) {
+        jQuery("#checkAvailBtn").addClass("hidden");
+        jQuery("#bookBtn").removeClass("hidden");
+    } else {
+        jQuery("#checkAvailBtn").removeClass("hidden");
+        jQuery("#bookBtn").addClass("hidden");
+    }
+}
 
 function changeCost(half, full) {
-    var options = jQuery('#bkSession').children('option');
+    var options = jQuery('#paramSession').children('option');
     for (i = 0; i < options.length; i++) {
         jQuery(options[i]).text(jQuery(options[i]).attr('data-org') + ' ' + (i < 2 ? half : full));
     }

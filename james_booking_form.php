@@ -124,9 +124,13 @@ for ($i = 1; $i < 10; $i++) {
                 </select>
             </div>
             <div class="col-sm-12">
+                <p class="hidden availMsg bg-success" style="margin-top:10px;padding:10px"></p>
+            </div>
+            <div class="col-sm-12">
                 <input type="button" id="checkAvailBtn" class="btn btn-default" value="Check Availability"/>
-                <input type="submit" class="btn btn-default hidden" value="Book Slot" name="bookSlot"/>
+                <input type="submit" id="bookBtn" class="btn btn-default hidden" value="Book Slot" name="bookSlot"/>
         </div>
+        <input type="hidden" name="paramTotalCost" id="totalCost"/>
     </form>
 </div>
 <?php } else {

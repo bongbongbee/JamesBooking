@@ -25,31 +25,54 @@ class james_booking
         }
     }
 
+    public function checkAvailSlotsCount($startDate, $session)
+    {
+        $args = array('post_type' => 'slot',
+            'meta_query'              => array(
+                array(
+                    'key'     => 'StartDate',
+                    'value'   => $startDate,
+                    'compare' => '=',
+                ),
+                array(
+                    'key'     => 'session',
+                    'value'   => $session,
+                    'compare' => '=',
+                ),
+            ),
+        );
+        $the_query            = new WP_Query($args);
+        $result["found_post"] = $the_query->found_posts;
+        return intval($the_query->found_posts);
+    }
+
     public function check_avail()
     {
+        $limit         = 30;
         $startDate     = $_GET["paramStartDate"];
         $noOfTables    = intval($_GET["paramNoOfTables"]);
         $paramLocation = $_GET["paramLocation"];
         $session       = intval($_GET["paramSession"]);
         $result        = array("startDate" => $startDate, "noOfTables" => $noOfTables, "location" => location, "session" => $session);
 
-        $args = array('post_type' => 'slot',
-            'meta_query'              => array(
-                array(
-                    'key'     => 'paramStartDate',
-                    'value'   => $startDate,
-                    'compare' => '=',
-                ),
-                array(
-                    'key'     => 'paramStartDate',
-                    'value'   => $startDate,
-                    'compare' => '=',
-                ),
-            ),
-        )
-        ;
-        $the_query            = new WP_Query($args);
-        $result["found_post"] = $the_query->found_posts;
+        $fullCount             = $this->checkAvailSlotsCount($startDate, "3");
+        $halfAMCount           = $this->checkAvailSlotsCount($startDate, "1");
+        $halfPMCount           = $this->checkAvailSlotsCount($startDate, "2");
+        $result["fullCount"]   = $fullCount;
+        $result["halfAMCount"] = $halfAMCount;
+        $result["halfPMCount"] = $halfPMCount;
+        $result["limit"]       = $limit;
+        $result["halfAMAvail"] = ($limit - $noOfTables - $halfAMCount - $fullCount);
+
+        if ($session == 1) {
+            $result["available"] = ($limit - $noOfTables - $halfAMCount - $fullCount) >= 0;
+        } elseif ($session == 2) {
+            $result["available"] = ($limit - $noOfTables - $halfPMCount - $fullCount) >= 0;
+        } elseif ($session == 3) {
+            $result["available"] = (($limit - $noOfTables - $halfPMCount - $fullCount) >= 0) && (($limit - $noOfTables - $halfAMCount - $fullCount) >= 0);
+        }
+
+        header('Content-Type: application/json');
         echo json_encode($result);
 
         die();
@@ -95,32 +118,29 @@ class james_booking
 
     public function start_book()
     {
+        $post_title = $_POST['paramName'] . " " . $_POST['paramStartDate'] . " at slot " . $_POST['paramSession'] . " Booked at " . date("d M y h:i:s");
+        echo $post_title;
 
         $post_detail = array(
-
-            'post_title'   => 'Slot',
-            'post_content' => 'testing it',
-            'post_type'    => 'slot',
-            'post_name'    => 'yale',
-            'post_status'  => 'Publish',
+            'post_title'  => $post_title,
+            'post_type'   => 'slot',
+            'post_status' => 'Publish',
         );
 
         $post_id = wp_insert_post($post_detail, true);
+        //add the created date
+        add_post_meta($post_id, 'Book Date', date("d M y h:i:s"));
 
         foreach ($_POST as $key => $value) {
             if (strstr($key, 'param')) {
+                $key = str_replace("param", "", $key);
                 add_post_meta($post_id, $key, $value);
             }
         }
 
-        //add the created date
-        add_post_meta($post_id, 'bookedDate', getdate());
-        //calculate the cost
-        $one_table_cost = (($_POST['paramStudentOrAdult'] == "Student") ? 10 : 15) * (($_POST['paramSession'] == 3) ? 2 : 1);
-
-        add_post_meta($post_id, "total_cost", '$.$one_table_cost');
-
         $mypostobject = (object) $_POST;
+        //temp to die
+        die();
 
         //start the payment
 
