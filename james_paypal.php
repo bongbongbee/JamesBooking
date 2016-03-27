@@ -12,6 +12,13 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 
+$jamesBaseUrl      = site_url();
+$jamesSuccessUrl   = "$jamesBaseUrl/booking-success";
+$jamesFailUrl      = "$jamesBaseUrl/booking-failure";
+$jamesClientId     = 'AU26pQeqXHj1_1FlUTSlSTLu1LKPtax9O7E1zG898sl72nGmwtFBNmkQTgOtPr_dfOknK8aqiCvMh5Sy';
+$jamesClientSecret = 'EJ8eQfryyRM4_qE3w9VX32KLgD18vXzv9BFxj2OcEccenXqmFaGw05BD3A0cthw3skN0r41UgzwPzTam';
+$paypalMode        = 'sandbox';
+
 function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref_no)
 {
     // After Step 1
@@ -27,11 +34,10 @@ function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref
 // ### Itemized information
     // (Optional) Lets you specify item wise
     // information
-    echo "$num_of_tables. table".intval($num_of_tables);
     $item1 = new Item();
     $item1->setName($item_name)
         ->setCurrency('SGD')
-        ->setQuantity(intval($num_of_tables))
+        ->setQuantity($num_of_tables)
         ->setSku($ref_no) // Similar to `item_number` in Classic API
         ->setPrice($one_table_cost);
 
@@ -61,10 +67,12 @@ function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref
 // ### Redirect urls
     // Set the urls that the buyer must be redirected to after
     // payment approval/ cancellation.
-    $baseUrl      = "http://localhost/wordpress";
+
     $redirectUrls = new RedirectUrls();
-    $redirectUrls->setReturnUrl("$baseUrl/booking-success")
-        ->setCancelUrl("$baseUrl/booking-failure");
+    global $jamesSuccessUrl, $jamesFailUrl, $jamesBaseUrl;
+    $redirectUrls->setReturnUrl($jamesSuccessUrl . "?slotId=$ref_no")
+        ->setCancelUrl($jamesFailUrl
+        );
 
 // ### Payment
     // A Payment Resource; create one using
@@ -107,16 +115,19 @@ function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref
 
 function get_api_context()
 {
+    global $jamesClientId, $jamesClientSecret, $paypalMode;
+
     $apiContext = new \PayPal\Rest\ApiContext(
         new \PayPal\Auth\OAuthTokenCredential(
-            'AU26pQeqXHj1_1FlUTSlSTLu1LKPtax9O7E1zG898sl72nGmwtFBNmkQTgOtPr_dfOknK8aqiCvMh5Sy', // ClientID
-            'EJ8eQfryyRM4_qE3w9VX32KLgD18vXzv9BFxj2OcEccenXqmFaGw05BD3A0cthw3skN0r41UgzwPzTam' // ClientSecret
+            $jamesClientId, // ClientID
+            $jamesClientSecret // ClientSecret
         )
     );
+//test james
 
     $apiContext->setConfig(
         array(
-            'mode'           => 'sandbox',
+            'mode'           => $paypalMode,
             'log.LogEnabled' => true,
             'log.FileName'   => 'PayPal.log',
             'log.LogLevel'   => 'FINE',
@@ -142,12 +153,9 @@ function receive_paypal_payment()
     $amount->setDetails($details);
     $transaction->setAmount($amount);
 
-    // Add the above transaction object inside our Execution object.
     $execution->addTransaction($transaction);
 
     try {
-        // Execute the payment
-        // (See bootstrap.php for more on `ApiContext`)
         $result = $payment->execute($execution, $apiContext);
         try {
             $payment = Payment::get($paymentId, $apiContext);

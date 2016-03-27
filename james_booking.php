@@ -45,7 +45,7 @@ class james_booking
         $table_total = 0;
         while ($the_query->have_posts()) {
             $the_query->the_post();
-            $table_count = intval(get_post_meta(get_the_ID(), 'NoOfTables',true));
+            $table_count = intval(get_post_meta(get_the_ID(), 'NoOfTables', true));
             $table_total += $table_count;
 
         }
@@ -54,12 +54,12 @@ class james_booking
 
     public function check_avail()
     {
-        $limit         = 30;
-        $startDate     = $_GET["paramStartDate"];
-        $noOfTables    = intval($_GET["paramNoOfTables"]);
-        $paramLocation = $_GET["paramLocation"];
-        $session       = intval($_GET["paramSession"]);
-        $result        = array("startDate" => $startDate, "noOfTables" => $noOfTables, "location" => location, "session" => $session);
+        $limit      = 30;
+        $startDate  = $_GET["paramStartDate"];
+        $noOfTables = intval($_GET["paramNoOfTables"]);
+        $location   = $_GET["paramLocation"];
+        $session    = intval($_GET["paramSession"]);
+        $result     = array("startDate" => $startDate, "noOfTables" => $noOfTables, "location" => location, "session" => $session);
 
         $fullCount             = $this->checkAvailSlotsCount($startDate, "3");
         $halfAMCount           = $this->checkAvailSlotsCount($startDate, "1");
@@ -68,7 +68,6 @@ class james_booking
         $result["halfAMCount"] = $halfAMCount;
         $result["halfPMCount"] = $halfPMCount;
         $result["limit"]       = $limit;
-        $result["halfAMAvail"] = ($limit - $noOfTables - $halfAMCount - $fullCount);
 
         if ($session == 1) {
             $result["available"] = ($limit - $noOfTables - $halfAMCount - $fullCount) >= 0;
@@ -101,8 +100,6 @@ class james_booking
         wp_enqueue_script('jquery-validation-additional', plugins_url('js/additional-methods.js', __FILE__));
         wp_enqueue_script('james-booking-form', plugins_url('js/james_booking_form.js', __FILE__));
 
-        //wp_enqueue_style('flat-ui-kit', plugins_url('css/flat-ui.css', __FILE__));
-        //TODO
         //include the script to have jquery validation inside check whether there is a jquery inside
 
     }
@@ -137,6 +134,7 @@ class james_booking
         //add the created date
         add_post_meta($post_id, 'Book Date', date("d M y h:i:s"));
 
+        //inserting all the relevant data
         foreach ($_POST as $key => $value) {
             if (strstr($key, 'param')) {
                 $key = str_replace("param", "", $key);
@@ -144,19 +142,33 @@ class james_booking
             }
         }
 
-        $mypostobject = (object) $_POST;
-        //temp to die
-        die();
+        $startDate  = $_POST["paramStartDate"];
+        $noOfTables = intval($_POST["paramNoOfTables"]);
+        $location   = $_POST["paramLocation"];
+        $session    = intval($_POST["paramSession"]);
+        $totalCost  = $_POST["paramTotalCost"];
+        if ($session == 1) {
+            $slotName = "AM Slot (9AM - 9PM)";
+        } elseif ($session == 2) {
+            $slotName = "PM Slot (9PM - 9AM)";
+        } elseif ($session == 3) {
+            $slotName = "Full Slot (9AM - 9PM)";
+        }
+
+        $oneTableCost = intval($_POST["paramOneTableCost"]);
+
+        $item_name = "$noOfTables Tables on $startDate for $slotName";
 
         //start the payment
 
-        //addAndRedirectPayment($one_table_cost, $_POST[$GLOBALS['paramNoOfTables']], $item_name, $post_id);
+        addAndRedirectPayment($oneTableCost, $noOfTables, $item_name, $post_id);
 
     }
 
     public function receive_payment()
     {
-        receive_paypal_payment();
-        send_sms('test');
+        $slotId = intval($_GET["slotId"]);
+        //receive_paypal_payment();
+        send_slot_sms($slotId);
     }
 }

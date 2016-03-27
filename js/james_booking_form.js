@@ -93,6 +93,7 @@ function calculateTotal() {
     var oneTableCost = parseInt(jQuery('#paramSession option:selected').val()) <= 2 ? half[studentOrAdult ? 0 : 1] : full[studentOrAdult ? 0 : 1];
     var noOfTables = jQuery('#paramNoOfTables option:selected').val();
     var totalCost = parseInt(noOfTables) * oneTableCost;
+    jQuery('#oneTableCost').val(oneTableCost);
     jQuery('#totalCost').val(totalCost);
     console.log("Total Cost : " + totalCost);
 }

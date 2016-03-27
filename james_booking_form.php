@@ -131,6 +131,7 @@ for ($i = 1; $i < 10; $i++) {
                 <input type="submit" id="bookBtn" class="btn btn-default hidden" value="Book Slot" name="bookSlot"/>
         </div>
         <input type="hidden" name="paramTotalCost" id="totalCost"/>
+        <input type="hidden" name="paramOneTableCost" id="oneTableCost"/>
     </form>
 </div>
 <?php } else {
