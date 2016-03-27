@@ -170,6 +170,7 @@ function receive_paypal_payment($slotId)
             add_post_meta($slotId, 'paypalPaymentID', $_GET['paymentId']);
             try {
                 $payment = Payment::get($paymentId, $apiContext);
+                return true;
             } catch (Exception $ex) {
                 echo $ex;
             }
@@ -181,4 +182,6 @@ function receive_paypal_payment($slotId)
             echo $ex;
         }
     }
+    else
+        return false;
 }

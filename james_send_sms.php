@@ -2,8 +2,8 @@
 
 $admin_tel_no = array(
     '94764364' //james
-    // ,'96491385' //Clement
-    // ,'90010020' //Tom
+     ,'96491385' //Clement
+     ,'90010020' //Tom
 );
 
 $slotStartDate   = "";

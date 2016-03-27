@@ -167,7 +167,10 @@ class james_booking
     public function receive_payment()
     {
         $slotId = intval($_GET["slotId"]);
-        receive_paypal_payment($slotId);
-        send_slot_sms($slotId);
+        $paid   = receive_paypal_payment($slotId);
+        if ($paid) {
+            send_slot_sms($slotId);
+        }
+
     }
 }
