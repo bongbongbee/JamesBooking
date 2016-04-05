@@ -22,7 +22,7 @@ class james_booking
 
         } elseif ($_GET['paymentId']) {
             $this->receive_payment();
-        }
+        } 
     }
 
     public function checkAvailSlotsCount($startDate, $session)
@@ -30,12 +30,13 @@ class james_booking
         $args = array('post_type' => 'slot',
             'meta_query'              => array(
                 array(
+
                     'key'     => 'StartDate',
                     'value'   => $startDate,
                     'compare' => '=',
                 ),
                 array(
-                    'key'     => 'session',
+                    'key'     => 'Session',
                     'value'   => $session,
                     'compare' => '=',
                 ),
@@ -169,8 +170,12 @@ class james_booking
         $slotId = intval($_GET["slotId"]);
         $paid   = receive_paypal_payment($slotId);
         if ($paid) {
+            set_slot_pin($slotId);
             send_slot_sms($slotId);
+            send_slot_mail($slotId);
         }
 
     }
+
+
 }

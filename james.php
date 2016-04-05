@@ -12,6 +12,9 @@ include_once 'james_paypal.php';
 include_once 'james_booking.php';
 
 include_once 'james_send_sms.php';
+include_once 'james_send_email.php';
+
+include_once 'james_random_generator.php';
 
 //new james_registration;
 new james_booking;

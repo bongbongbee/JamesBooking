@@ -1,17 +1,5 @@
 <?php
 
-$admin_tel_no = array(
-    '94764364' //james
-     ,'96491385' //Clement
-     ,'90010020' //Tom
-);
-
-$slotStartDate   = "";
-$slotNoOfTables  = "";
-$slotTotalCost   = "";
-$slotLocation    = "";
-$slotUserName    = "";
-$slotUserContact = "";
 
 function send_sms($booking_message, $tel_no)
 {
@@ -57,7 +45,7 @@ function send_user_sms()
 {
     global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact;
     $totalCost        = $slotTotalCost;
-    $sms_user_msg_tpl = "We have successfully received your payment at $$totalCost and your slot is activated";
+    $sms_user_msg_tpl = "We have successfully received your payment at $$totalCost and your session on $slotStartDate has been confirmed\nFor further assistance, you can contact our onsite staff, BK @93835592.";
     $message          = $sms_user_msg_tpl;
     send_sms($message, array($slotUserContact));
 }
