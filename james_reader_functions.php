@@ -31,18 +31,19 @@ function james_get_users_for_readers()
     $latest_date = "";
     while ($the_query->have_posts()) {
         $the_query->the_post();
-        $pins          = get_post_meta(get_the_ID(), 'pin', true);
+        $postId = get_the_ID();
+        $pins          = get_post_meta($postId, 'pin', true);
         $modified_date = get_the_modified_date('d M Y h:i');
+        $slot_date = get_post_meta($postId, 'StartDate' , true);
         if ($latest_date < $modified_date) {
             $latest_date = $modified_date;
         }
-
-        $paypalPaymentID = get_post_meta(get_the_ID(), 'paypalPaymentID', true);
+        $paypalPaymentID = get_post_meta($postId, 'paypalPaymentID', true);
         $pin_array       = explode(",", $pins);
         for ($curr_pin = 0; $curr_pin < count($pin_array); $curr_pin++) {
             array_push($results, array(
                 'modified_date' => $modified_date,
-                'user_id'       => $paypalPaymentID . $curr_pin,
+                'user_id'       => "Slot$postId Date$slot_date PN$curr_pin",
                 'pin'           => $pin_array[$curr_pin],
                 'slot'          => get_the_ID(),
             ));
