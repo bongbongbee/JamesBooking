@@ -8,10 +8,10 @@ class james_booking
 
         add_shortcode('james_booking', array($this, 'shortcode'));
         add_action('wp_enqueue_scripts', array($this, 'init_scripts'));
-        add_action('init', array($this, 'add_book_post'));
+        add_action('init', array($this, 'start_post_get'));
     }
 
-    public function add_book_post()
+    public function start_post_get()
     {
         if ($_POST['bookSlot']) {
 
@@ -22,7 +22,10 @@ class james_booking
 
         } elseif ($_GET['paymentId']) {
             $this->receive_payment();
-        } 
+        } elseif ($_GET['getUsers'] == 'true')
+        {
+            james_get_users_for_readers();
+        }
     }
 
     public function checkAvailSlotsCount($startDate, $session)

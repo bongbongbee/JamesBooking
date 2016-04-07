@@ -1,15 +1,15 @@
 <?php
 $PIN_LENGTH = 6;
- 
+
 function set_slot_pin($slotId)
 {
     //find the wp_post
     global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotSession;
-    $slotStartDate   = get_post_meta($slotId, 'StartDate', true);
-    $slotNoOfTables  = get_post_meta($slotId, 'NoOfTables', true);
-    $slotLocation    = get_post_meta($slotId, 'Location', true);
-    $slotSession = get_post_meta($slotId,'Session', true);
-    $pins = james_generate_pin($slotStartDate, $slotSession, $slotNoOfTables);
+    $slotStartDate  = get_post_meta($slotId, 'StartDate', true);
+    $slotNoOfTables = get_post_meta($slotId, 'NoOfTables', true);
+    $slotLocation   = get_post_meta($slotId, 'Location', true);
+    $slotSession    = get_post_meta($slotId, 'Session', true);
+    $pins           = james_generate_pin($slotStartDate, $slotSession, $slotNoOfTables);
     add_post_meta($slotId, 'pin', join(",", $pins));
 }
 
@@ -52,8 +52,17 @@ function checkPinExist($startDate, $session, $pin)
             ),
         ),
     );
-    $the_query   = new WP_Query($args);
-    $table_total = 0;
+	    $the_query = new WP_Query($args);
+	    $results = array();
+    while ($the_query->have_posts()) {
+        $the_query->the_post();
+        $pins = get_post_meta(get_the_ID(),'pin', true);
+
+        $paypalPayerID = get_post_meta(get_the_ID(),'paypalPayerID',true);
+
+        
+    }
+
     return !$the_query->have_posts();
 }
 

@@ -16,5 +16,7 @@ include_once 'james_send_email.php';
 
 include_once 'james_random_generator.php';
 
+include_once 'james_reader_functions.php';
+
 //new james_registration;
 new james_booking;
