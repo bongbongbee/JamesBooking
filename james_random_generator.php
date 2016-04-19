@@ -52,16 +52,7 @@ function checkPinExist($startDate, $session, $pin)
             ),
         ),
     );
-	    $the_query = new WP_Query($args);
-	    $results = array();
-    while ($the_query->have_posts()) {
-        $the_query->the_post();
-        $pins = get_post_meta(get_the_ID(),'pin', true);
-
-        $paypalPayerID = get_post_meta(get_the_ID(),'paypalPayerID',true);
-
-        
-    }
+    $the_query = new WP_Query($args);
 
     return !$the_query->have_posts();
 }

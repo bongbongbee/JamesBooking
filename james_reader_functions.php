@@ -35,6 +35,8 @@ function james_get_users_for_readers()
         $pins          = get_post_meta($postId, 'pin', true);
         $modified_date = get_the_modified_date('d M Y h:i');
         $slot_date     = get_post_meta($postId, 'StartDate', true);
+        $expired_from = get_post_meta($postId, 'expiredFrom', true);
+        $expired_to = get_post_meta($postId, 'expiredTo', true);
         if ($latest_date < $modified_date) {
             $latest_date = $modified_date;
         }
@@ -48,6 +50,9 @@ function james_get_users_for_readers()
                 'pin'           => $pin_array[$curr_pin],
                 'slot'          => get_the_ID(),
                 'session'       => $session,
+                'expiredFrom' => $expired_from,
+                'expiredTo' => $expired_to
+
             ));
         }
 

@@ -22,8 +22,7 @@ class james_booking
 
         } elseif ($_GET['paymentId']) {
             $this->receive_payment();
-        } elseif ($_GET['getUsers'] == 'true')
-        {
+        } elseif ($_GET['getUsers'] == 'true') {
             james_get_users_for_readers();
         }
     }
@@ -58,14 +57,19 @@ class james_booking
 
     public function check_avail()
     {
-        $limit      = 5;
+        global $limit;
+
         $startDate  = $_GET["paramStartDate"];
         $noOfTables = intval($_GET["paramNoOfTables"]);
         $location   = $_GET["paramLocation"];
         $session    = intval($_GET["paramSession"]);
         $result     = array("startDate" => $startDate, "noOfTables" => $noOfTables, "location" => location, "session" => $session);
 
-        $fullCount             = $this->checkAvailSlotsCount($startDate, "3");
+        $startDateObj     = DateTime::createFromFormat('d M Y', $startDate);
+        $nextStartDateObj = date_add($startDateObj, date_interval_create_from_date_string('1 day'));
+        $nextStartDate = $nextStartDateObj->format('d M Y');
+        $fullAMCount           = $this->checkAvailSlotsCount($startDate, "3"); //full day from 9am to next day 9am
+        $fullPMCount           = $this->checkAvailSlotsCount($startDate, "4");
         $halfAMCount           = $this->checkAvailSlotsCount($startDate, "1");
         $halfPMCount           = $this->checkAvailSlotsCount($startDate, "2");
         $result["fullCount"]   = $fullCount;
@@ -74,11 +78,14 @@ class james_booking
         $result["limit"]       = $limit;
 
         if ($session == 1) {
-            $result["available"] = ($limit - $noOfTables - $halfAMCount - $fullCount) >= 0;
+            $result["available"] = ($limit - $noOfTables - $halfAMCount - $fullAMCount) >= 0;
         } elseif ($session == 2) {
-            $result["available"] = ($limit - $noOfTables - $halfPMCount - $fullCount) >= 0;
+            $result["available"] = ($limit - $noOfTables - $halfPMCount - $fullAMCount) >= 0;
         } elseif ($session == 3) {
-            $result["available"] = (($limit - $noOfTables - $halfPMCount - $fullCount) >= 0) && (($limit - $noOfTables - $halfAMCount - $fullCount) >= 0);
+            $result["available"] = (($limit - $noOfTables - $halfPMCount - $fullAMCount) >= 0) && (($limit - $noOfTables - $halfAMCount - $fullAMCount) >= 0);
+        }elseif($session == 4)
+        {
+            $result["available"] = (($limit - $noOfTables - $halfPMCount - $fullAMCount) >= 0) && (($limit - $noOfTables - $halfAMCount - $fullCount) >= 0);
         }
 
         header('Content-Type: application/json');
@@ -145,18 +152,40 @@ class james_booking
             }
         }
 
-        $startDate  = $_POST["paramStartDate"];
-        $noOfTables = intval($_POST["paramNoOfTables"]);
-        $location   = $_POST["paramLocation"];
-        $session    = intval($_POST["paramSession"]);
-        $totalCost  = $_POST["paramTotalCost"];
+        $startDate        = $_POST["paramStartDate"];
+        $startDateObj     = DateTime::createFromFormat('d M Y', $startDate);
+        $nextStartDateObj = date_add($startDateObj, date_interval_create_from_date_string('1 day'));
+
+        $morningString = " 09:00:00";
+        $nightString   = " 21:00:00";
+        $endNightString = " 22:00:00";
+        $endMorningString = " 10:00:00";
+        $nextStartDate = $nextStartDateObj->format('d M Y');
+        $noOfTables    = intval($_POST["paramNoOfTables"]);
+        $location      = $_POST["paramLocation"];
+        $session       = intval($_POST["paramSession"]);
+        $totalCost     = $_POST["paramTotalCost"];
         if ($session == 1) {
-            $slotName = "AM Slot (9AM - 9PM)";
+            $slotName    = "AM Slot (9AM - 9PM)";
+            $expiredFrom = $startDate . $morningString;
+            $expiredTo   = $startDate . $endNightString;
         } elseif ($session == 2) {
-            $slotName = "PM Slot (9PM - 9AM)";
+            $slotName    = "PM Slot (9PM - 9AM)";
+            $expiredFrom = $startDate . $nightString;
+            $expiredTo   = $nextStartDate . $endMorningString;
         } elseif ($session == 3) {
-            $slotName = "Full Slot (9AM - 9PM)";
+            $slotName    = "Full Slot (9AM - Next Day 9AM)";
+            $expiredFrom = $startDate . $morningString;
+            $expiredTo   = $nextStartDate . $endMorningString;
+        } else if ($session == 4) {
+            $slotName = "Full Slot (9PM - Next Day 9PM)";
+
+            $expiredFrom = $startDate . $nightString;
+            $expiredTo   = $nextStartDate . $endNightString;
         }
+
+        add_post_meta($post_id, 'expiredFrom', $expiredFrom);
+        add_post_meta($post_id, 'expiredTo', $expiredTo);
 
         $oneTableCost = intval($_POST["paramOneTableCost"]);
 
@@ -179,6 +208,5 @@ class james_booking
         }
 
     }
-
 
 }

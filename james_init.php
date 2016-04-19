@@ -30,3 +30,6 @@ $admin_mail = array(
     'james147@gmail.com' //james
      //,'thestudyarea@gmail.com' 
 );
+
+//limit of slots
+$limit = 5;
