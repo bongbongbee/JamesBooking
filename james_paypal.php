@@ -20,10 +20,14 @@ $jamesFailUrl    = "$jamesBaseUrl/booking-failure";
 //James
 // $jamesClientId     = 'AU26pQeqXHj1_1FlUTSlSTLu1LKPtax9O7E1zG898sl72nGmwtFBNmkQTgOtPr_dfOknK8aqiCvMh5Sy';
 // $jamesClientSecret = 'EJ8eQfryyRM4_qE3w9VX32KLgD18vXzv9BFxj2OcEccenXqmFaGw05BD3A0cthw3skN0r41UgzwPzTam';
+//TSA Account for Sandbox
 $jamesClientId     = 'ATAo58tHcl99h2jDmTCzqfLyq4Tzzo_UczICiHydpxwkuwrsYnSHT-pj7ej3mgJZ8ubRYUlglJuwO2Ac';
 $jamesClientSecret = 'EFPjxAprHXSoWay-V0xXpX-sozMCAPQE1wdle7HjLfj9rdsQ6gX-ICydRU-I5_Do4cbjH0_YbmuQzVl0';
+//TSA Account for Live
+$jamesClientId     = 'AZCldO2prrvPREfap4ezEEoOwT-JEaQlOvwF9wktdoznBovvcmoP3CHJYI5VVrG8k-LhDWvn93CBzf3u';
+$jamesClientSecret = 'ED77jhRD5iaXUOd_GwExR6pbAYS_54wVKwsfNMpNrGTyzgjk-RSY2D90A-3nTJZIydrzqvPXvAYxYiLv';
 
-$paypalMode = 'sandbox';
+$paypalMode = 'live';
 
 function addAndRedirectPayment($one_table_cost, $num_of_tables, $item_name, $ref_no)
 {

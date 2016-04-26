@@ -30,26 +30,26 @@ if (is_user_logged_in()) {
             <label for="paramName" class="control-label">
                 First Name
             </label>
-            <input type="text" class="form-control" id="paramName"  readonly="true" name="paramName" value="<?php echo $name ?>Lian Shiying"/>
+            <input type="text" class="form-control" id="paramName"  readonly="true" name="paramName" value="<?php echo $name ?>"/>
         </div>
 
         <div class="col-sm-6 control-group"  >
             <label for="paramNric" class="control-label">
                 NRIC / Passport No
             </label>
-            <input type="text" class="form-control  required-group" id="paramNric"    name="paramNric" value="<?php echo $nric ?>1" readonly=true/>
+            <input type="text" class="form-control  required-group" id="paramNric"    name="paramNric" value="<?php echo $nric ?>" readonly=true/>
         </div>
         <div class="col-sm-6 control-group"  >
             <label for="paramContact" class="control-label">
                 Contact No.
             </label>
-            <input type="text" class="form-control  required-group contact" id="paramContact" name="paramContact" value="<?php echo $contact ?>94764364" minlength="8" readonly=true/>
+            <input type="text" class="form-control  required-group contact" id="paramContact" name="paramContact" value="<?php echo $contact ?>" minlength="8" readonly=true/>
         </div>
         <div class="col-sm-12">
             <label for="paramEmail"  class="control-label">
                 Email Address
             </label>
-            <input type="text" class="form-control required-group email" id="paramEmail" name="paramEmail" value="<?php echo $email ?>jamse147@gmail.com" readonly=true/>
+            <input type="text" class="form-control required-group email" id="paramEmail" name="paramEmail" value="<?php echo $email ?>" readonly=true/>
         </div>
         <div class="col-sm-12">
             <div class="showEditProfilePage" >
@@ -79,13 +79,15 @@ if (is_user_logged_in()) {
                 Please choose which location?
             </label>
             <br/>
-            <label class="radio-inline" for="paramLocation1">
+
+            <!--<label class="radio-inline" for="paramLocation1">
                 <input type="radio" name="paramLocation" id="paramLocation1" value="Tai Seng"
-                    checked/>
+                    />
                     Tai Seng
                 </label>
+                -->
                 <label class="radio-inline" for="paramLocation2">
-                    <input type="radio" name="paramLocation" id="paramLocation2" value="Bukit Batok" />
+                    <input type="radio" name="paramLocation" id="paramLocation2" value="Bukit Batok" checked/>
                     Bukit Batok
                 </label>
             </div>

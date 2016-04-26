@@ -46,7 +46,7 @@ function james_get_users_for_readers()
         for ($curr_pin = 0; $curr_pin < count($pin_array); $curr_pin++) {
             array_push($results, array(
                 'modified_date' => $modified_date,
-                'user_id'       => "Slot$postId Date$slot_date PN$curr_pin",
+                'user_id'       => "Slot$postId Date$slot_date PN".$pin_array[$curr_pin],
                 'pin'           => $pin_array[$curr_pin],
                 'slot'          => get_the_ID(),
                 'session'       => $session,

@@ -23,6 +23,7 @@ class james_booking
         } elseif ($_GET['paymentId']) {
             $this->receive_payment();
         } elseif ($_GET['getUsers'] == 'true') {
+            
             james_get_users_for_readers();
         }
     }

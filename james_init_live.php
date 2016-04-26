@@ -11,9 +11,9 @@ $paramNoOfTables     = "bkNoOfTables";
 
 //for SMS
 $admin_tel_no = array(
-    '97925701' //james
-     //,'96491385' //Clement
-     //,'90010020' //Tom
+    '94764364' //james
+     ,'96491385' //Clement
+     ,'90010020' //Tom
 );
 
 $slotStartDate   = "";
@@ -22,15 +22,14 @@ $slotTotalCost   = "";
 $slotLocation    = "";
 $slotUserName    = "";
 $slotUserContact = "";
-$slotPin = "";
 $slotUserEmail = "";
 $slotSession = "";
 
 //for email
 $admin_mail = array(
     'james147@gmail.com' //james
-     //,'thestudyarea@gmail.com' 
+     ,'thestudyarea@gmail.com' 
 );
 
 //limit of slots
-$limit = 5;
+$limit = 30;

@@ -5,7 +5,8 @@ Plugin Name: James Booking Module
 Version: 1.0
 Author: James Lian
  */
-include_once 'james_init.php';
+//include_once 'james_init.php';
+include_once 'james_init_live.php';
 include_once 'james_slot_custom_posttype.php';
 //include_once 'james_registration.php';
 include_once 'james_paypal.php';
