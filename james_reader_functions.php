@@ -1,7 +1,14 @@
 <?php
 function james_get_users_for_readers()
 {
-    $startDate = current_time('d M Y');
+    $startDateObj = new DateTime( );
+    $minStartDateObj = new DateTime($startDateObj->format('d M Y 00:00:00'));
+    $interval = date_diff($minStartDateObj, $startDateObj);
+    if(intval($interval->format('%h')) < 9)
+        $startDateObj->modify('-1 day');
+
+
+    $startDate = $startDateObj->format('d M Y');
     $location  = $_GET["location"];
 
     //get the location
@@ -29,6 +36,7 @@ function james_get_users_for_readers()
 
     $results     = array();
     $latest_date = "";
+
     while ($the_query->have_posts()) {
         $the_query->the_post();
         $postId        = get_the_ID();
@@ -37,9 +45,13 @@ function james_get_users_for_readers()
         $slot_date     = get_post_meta($postId, 'StartDate', true);
         $expired_from = get_post_meta($postId, 'expiredFrom', true);
         $expired_to = get_post_meta($postId, 'expiredTo', true);
-        if ($latest_date < $modified_date) {
+
+        
+        if (DateTime::createFromFormat('d M Y h:i',$modified_date) > $latest_date_obj) {
             $latest_date = $modified_date;
+            $latest_date_obj = DateTime::createFromFormat('d M Y h:i', $modified_date);
         }
+
         $paypalPaymentID = get_post_meta($postId, 'paypalPaymentID', true);
         $session         = get_post_meta($postId, 'Session', true);
         $pin_array       = explode(",", $pins);

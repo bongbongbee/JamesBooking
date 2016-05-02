@@ -38,7 +38,7 @@ function send_user_mail()
     global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail;
     $totalCost        = $slotTotalCost;
 
-    $sms_user_msg_tpl = "We have successfully received your payment at $$totalCost and your session on $slotStartDate has been confirmed.\nFor further assistance, you can contact our onsite staff, BK @93835592.";
+    $sms_user_msg_tpl = "We have received your payment and your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pins is $pin #";
     $message          = $sms_user_msg_tpl;
     $subject = "TheStudyArea - Booking Confirmed for $slotStartDate";
     send_mail($subject, $message, array($slotUserMail));

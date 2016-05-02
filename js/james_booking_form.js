@@ -4,13 +4,20 @@ jQuery(document).ready(function() {
     jQuery.validator.addMethod("contact", function(value, element) {
         return (value.startsWith("7") || value.startsWith("8") || value.startsWith("9"));
     }, "Please enter a valid contact number in the profile page");
+
+    var currDate = new Date();
+    if(currDate.getHours() < 9)
+        currDate.setDate(currDate.getDate() - 1);
+
     jQuery('#paramStartDate').datepicker({
         dateFormat: 'dd M yy',
-        minDate: new Date(),
+        minDate: currDate,
         onSelect: function() {
             toggleButtons(false);
         }
     });
+
+
     var bookingFormValidator = jQuery('#booking_form').validate({
         //errorPlacement
         errorPlacement: function(error, element) {
@@ -55,6 +62,7 @@ jQuery(document).ready(function() {
     });
     changeCost('$10', '$15');
 });
+
 
 function checkAvail() {
     //https://api.jquery.com/jquery.get/

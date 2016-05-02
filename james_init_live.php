@@ -11,8 +11,7 @@ $paramNoOfTables     = "bkNoOfTables";
 
 //for SMS
 $admin_tel_no = array(
-    '94764364' //james
-     ,'96491385' //Clement
+    '96491385' //Clement
      ,'90010020' //Tom
 );
 
@@ -32,4 +31,4 @@ $admin_mail = array(
 );
 
 //limit of slots
-$limit = 30;
+$limit = 28;
