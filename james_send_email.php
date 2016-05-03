@@ -9,14 +9,16 @@ function send_mail($booking_subject, $booking_message, $email)
 function send_slot_mail($slotId)
 {
     //find the wp_post
-    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail;
+    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail, $slotPin;
     $slotStartDate   = get_post_meta($slotId, 'StartDate', true);
     $slotNoOfTables  = get_post_meta($slotId, 'NoOfTables', true);
     $slotTotalCost   = get_post_meta($slotId, 'TotalCost', true);
     $slotLocation    = get_post_meta($slotId, 'Location', true);
     $slotUserName    = get_post_meta($slotId, 'Name', true);
     $slotUserContact = get_post_meta($slotId, 'Contact', true);
+    $slotPin = get_post_meta($slotId, 'pin', true);
     $slotUserMail = get_post_meta($slotId,'Email',true);
+
     send_admin_mail();
     send_user_mail();
     
@@ -24,10 +26,10 @@ function send_slot_mail($slotId)
 
 function send_admin_mail()
 {
-    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $admin_mail;
+    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $admin_mail, $slotPin;
     $totalCost = $slotTotalCost;
 
-    $sms_admin_msg_tpl = "Name:$slotUserName Tel No:$slotUserContact Booking:$slotStartDate Tables:$slotNoOfTables Loc:$slotLocation $$totalCost";
+    $sms_admin_msg_tpl = "Name:$slotUserName Tel No:$slotUserContact Booking:$slotStartDate Tables:$slotNoOfTables Loc:$slotLocation $$totalCost Pins: $slotPin";
     $message           = $sms_admin_msg_tpl;
     $subject = "TheStudyArea - New Appointment for $slotStartDate";
     send_mail($subject,$message, $admin_mail);
@@ -35,10 +37,10 @@ function send_admin_mail()
 
 function send_user_mail()
 {
-    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail;
+    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail, $slotPin;
     $totalCost        = $slotTotalCost;
 
-    $sms_user_msg_tpl = "We have received your payment and your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pins is $pin #";
+    $sms_user_msg_tpl = "We have received your payment and your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pins is $slotPin #";
     $message          = $sms_user_msg_tpl;
     $subject = "TheStudyArea - Booking Confirmed for $slotStartDate";
     send_mail($subject, $message, array($slotUserMail));
