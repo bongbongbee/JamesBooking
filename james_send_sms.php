@@ -50,7 +50,7 @@ function send_user_sms()
     $totalCost = $slotTotalCost;
     $pins      = explode(",", $slotPin);
     foreach ($pins as $pin) {
-        $sms_user_msg_tpl = "We have received your payment and your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pins is $pin #";
+        $sms_user_msg_tpl = "Your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pin is $pin #";
         $message          = $sms_user_msg_tpl;
         send_sms($message, array($slotUserContact));
     }
