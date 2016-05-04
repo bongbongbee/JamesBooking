@@ -17,6 +17,7 @@ function send_slot_mail($slotId)
     $slotUserName    = get_post_meta($slotId, 'Name', true);
     $slotUserContact = get_post_meta($slotId, 'Contact', true);
     $slotUserMail = get_post_meta($slotId,'Email',true);
+    $slotPin         = get_post_meta($slotId, 'pin', true);
     send_admin_mail();
     send_user_mail();
     
@@ -24,10 +25,10 @@ function send_slot_mail($slotId)
 
 function send_admin_mail()
 {
-    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $admin_mail;
+    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact,$slotPin, $admin_mail;
     $totalCost = $slotTotalCost;
 
-    $sms_admin_msg_tpl = "Name:$slotUserName Tel No:$slotUserContact Booking:$slotStartDate Tables:$slotNoOfTables Loc:$slotLocation $$totalCost";
+    $sms_admin_msg_tpl = "Name:$slotUserName Tel No:$slotUserContact Booking:$slotStartDate Tables:$slotNoOfTables Loc:$slotLocation $$totalCost Pins: $slotPin";
     $message           = $sms_admin_msg_tpl;
     $subject = "TheStudyArea - New Appointment for $slotStartDate";
     send_mail($subject,$message, $admin_mail);
@@ -35,10 +36,10 @@ function send_admin_mail()
 
 function send_user_mail()
 {
-    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail;
+    global $slotStartDate, $slotNoOfTables, $slotTotalCost, $slotLocation, $slotUserName, $slotUserContact, $slotUserMail, $slotPin;
     $totalCost        = $slotTotalCost;
 
-    $sms_user_msg_tpl = "We have received your payment and your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pins is $pin #";
+    $sms_user_msg_tpl = "We have received your payment and your session on $slotStartDate has been confirmed. For assistance, you can contact our staff, Clement @96491385. Your Pins is $slotPin #";
     $message          = $sms_user_msg_tpl;
     $subject = "TheStudyArea - Booking Confirmed for $slotStartDate";
     send_mail($subject, $message, array($slotUserMail));

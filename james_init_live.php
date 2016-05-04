@@ -22,6 +22,7 @@ $slotLocation    = "";
 $slotUserName    = "";
 $slotUserContact = "";
 $slotUserEmail = "";
+$slotPin = "";
 $slotSession = "";
 
 //for email
