@@ -80,12 +80,12 @@ if (is_user_logged_in()) {
             </label>
             <br/>
 
-            <!--<label class="radio-inline" for="paramLocation1">
+            <label class="radio-inline" for="paramLocation1">
                 <input type="radio" name="paramLocation" id="paramLocation1" value="Tai Seng"
                     />
                     Tai Seng
                 </label>
-                -->
+
                 <label class="radio-inline" for="paramLocation2">
                     <input type="radio" name="paramLocation" id="paramLocation2" value="Bukit Batok" checked/>
                     Bukit Batok

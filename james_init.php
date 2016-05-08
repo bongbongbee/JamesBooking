@@ -33,4 +33,6 @@ $admin_mail = array(
 );
 
 //limit of slots
-$limit = 5;
+//limit of slots
+$limit['Bukit Batok'] = 28;
+$limit['Tai Seng'] = 30;

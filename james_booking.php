@@ -76,17 +76,17 @@ class james_booking
         $result["fullCount"]   = $fullCount;
         $result["halfAMCount"] = $halfAMCount;
         $result["halfPMCount"] = $halfPMCount;
-        $result["limit"]       = $limit;
+        $result["limit"]       = $limit[$location];
 
         if ($session == 1) {
-            $result["available"] = ($limit - $noOfTables - $halfAMCount - $fullAMCount) >= 0;
+            $result["available"] = ($limit[$location] - $noOfTables - $halfAMCount - $fullAMCount) >= 0;
         } elseif ($session == 2) {
-            $result["available"] = ($limit - $noOfTables - $halfPMCount - $fullAMCount) >= 0;
+            $result["available"] = ($limit[$location] - $noOfTables - $halfPMCount - $fullAMCount) >= 0;
         } elseif ($session == 3) {
-            $result["available"] = (($limit - $noOfTables - $halfPMCount - $fullAMCount) >= 0) && (($limit - $noOfTables - $halfAMCount - $fullAMCount) >= 0);
+            $result["available"] = (($limit[$location] - $noOfTables - $halfPMCount - $fullAMCount) >= 0) && (($limit[$location] - $noOfTables - $halfAMCount - $fullAMCount) >= 0);
         }elseif($session == 4)
         {
-            $result["available"] = (($limit - $noOfTables - $halfPMCount - $fullAMCount) >= 0) && (($limit - $noOfTables - $halfAMCount - $fullCount) >= 0);
+            $result["available"] = (($limit[$location] - $noOfTables - $halfPMCount - $fullAMCount) >= 0) && (($limit[$location] - $noOfTables - $halfAMCount - $fullCount) >= 0);
         }
 
         header('Content-Type: application/json');
