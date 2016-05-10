@@ -1,9 +1,14 @@
 <?php
 function james_get_users_for_readers()
 {
-    $startDateObj = new DateTime( );
-    $minStartDateObj = new DateTime($startDateObj->format('d M Y 00:00:00'));
+    $startDateObj = new DateTime('now',new DateTimeZone("Asia/Singapore"));
+    
+    $minStartDateObj = new DateTime('now',new DateTimeZone("Asia/Singapore"));
+    $minStartDateObj->setTime(0,0);
+
+    
     $interval = date_diff($minStartDateObj, $startDateObj);
+    
     if(intval($interval->format('%h')) < 9)
         $startDateObj->modify('-1 day');
 
@@ -14,6 +19,8 @@ function james_get_users_for_readers()
     //get the location
     //get the current date
     //get the pins to input with the post id as the user id
+
+    
 
     $args = array('post_type' => 'slot',
         'meta_query'              => array(
